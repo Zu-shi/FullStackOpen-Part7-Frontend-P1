@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  BrowserRouter as Router, Routes, Route, Link
+  BrowserRouter as Router, Routes, Route, Link, useParams
 } from 'react-router-dom'
 // What do these all do?
 
@@ -22,10 +22,24 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote =>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link><br />
+        </li>
+      )}
     </ul>
   </div>
 )
+
+const Anecdote = ({ anecdotes }) => {
+  const id = useParams().id
+  const anecdote = anecdotes.find(an => an.id === Number(id))
+  return (
+    <div>
+      {anecdote.content}
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -136,6 +150,7 @@ const App = () => {
 
       <Routes>
         <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
+        <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
         <Route path="/create_new" element={<CreateNew addNew={addNew} />}></Route>
         <Route path="/about" element={<About />}></Route>
