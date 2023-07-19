@@ -2,6 +2,8 @@ import { useState } from 'react'
 import {
   BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
+import { useField } from './useField'
+
 // What do these all do?
 
 const Menu = () => {
@@ -64,18 +66,22 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  // const [content, setContent] = useState('')
+  // const [author, setAuthor] = useState('')
+  // const [info, setInfo] = useState('')
   const navigate = useNavigate()
+  const contentType = useField('content')
+  const authorType = useField('author')
+  const infoType = useField('info')
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(contentType)
     props.addNew({
-      content,
-      author,
-      info,
+      content: contentType.value,
+      author: authorType.value,
+      info: infoType.value,
       votes: 0
     })
     navigate('/anecdotes')
@@ -87,15 +93,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
         </div>
         <button>create</button>
       </form>
