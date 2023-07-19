@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
 import { useField } from './useField'
+import { Table, Form, Button, Alert } from 'react-bootstrap'
 
 // What do these all do?
 
@@ -23,13 +24,20 @@ const Menu = () => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
-        <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link><br />
-        </li>
-      )}
-    </ul>
+    <Table striped>
+      <tbody>
+        {anecdotes.map(anecdote =>
+          <tr key={anecdote.id}>
+            <li key={anecdote.id}>
+              <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link><br />
+            </li>
+            <td>
+              {anecdote.author}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </Table>
   </div>
 )
 
@@ -90,22 +98,26 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
-        </div>
-        <div>
-          author
-          <input name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
-        </div>
-        <button onClick={(e) => { e.preventDefault(); infoType.reset(); authorType.reset(); contentType.reset() }}>reset</button>
-        <button>create</button>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>Content:</Form.Label>
+          <Form.Control name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
+
+          <Form.Label>Author:</Form.Label>
+          <Form.Control name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
+
+
+          <Form.Label>Url for more info:</Form.Label>
+          <Form.Control name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
+
+          <Button onClick={(e) => { e.preventDefault(); infoType.reset(); authorType.reset(); contentType.reset() }} type="submit">
+            Reset
+          </Button>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 
@@ -153,23 +165,29 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>{notification}</div>
-      <div>
-        <h1>Software anecdotes</h1>
-        <Menu />
-      </div>
+    <div className='container'>
+      {(notification &&
+        <Alert variant="success">
+          {notification}
+        </Alert>
+      )}
+      <Router>
+        <div>
+          <h1>Software anecdotes</h1>
+          <Menu />
+        </div>
 
-      <Routes>
-        <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
-        <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
-        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
-        <Route path="/create_new" element={<CreateNew addNew={addNew} />}></Route>
-        <Route path="/about" element={<About />}></Route>
-      </Routes>
-      <br />
-      <Footer />
-    </Router>
+        <Routes>
+          <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
+          <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
+          <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
+          <Route path="/create_new" element={<CreateNew addNew={addNew} />}></Route>
+          <Route path="/about" element={<About />}></Route>
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    </div>
   )
 }
 
