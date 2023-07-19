@@ -7,10 +7,16 @@ export const useField = (type) => {
     setValue(event.target.value)
   }
 
+  const reset = () => {
+    //event.preventDefault()
+    setValue('')
+  }
+
   return {
     type, // why return type when its already an input? seems bad.
     value,
-    onChange
+    onChange,
+    reset
   }
 }
 
