@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
 import { useField } from './useField'
+import { Container } from '@mui/material'
+import { Table, TableBody, TableContainer, Paper, TableCell, TableRow, TextField, Button } from '@mui/material'
 
 // What do these all do?
 
@@ -23,13 +25,23 @@ const Menu = () => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
-        <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link><br />
-        </li>
-      )}
-    </ul>
+
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {anecdotes.map(anecdote =>
+            <TableRow key={anecdote.id}>
+              <TableCell>
+                <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link><br />
+              </TableCell>
+              <TableCell>
+                {anecdote.author}
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
 )
 
@@ -93,18 +105,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
+          <TextField name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
         </div>
         <div>
           author
-          <input name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
+          <TextField name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
+          <TextField name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
         </div>
-        <button onClick={(e) => { e.preventDefault(); infoType.reset(); authorType.reset(); contentType.reset() }}>reset</button>
-        <button>create</button>
+        <Button variant="contained" onClick={(e) => { e.preventDefault(); infoType.reset(); authorType.reset(); contentType.reset() }}>reset</Button>
+        <Button variant="contained">create</Button>
       </form>
     </div>
   )
@@ -153,23 +165,25 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>{notification}</div>
-      <div>
-        <h1>Software anecdotes</h1>
-        <Menu />
-      </div>
+    <Container>
+      <Router>
+        <div>{notification}</div>
+        <div>
+          <h1>Software anecdotes</h1>
+          <Menu />
+        </div>
 
-      <Routes>
-        <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
-        <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
-        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
-        <Route path="/create_new" element={<CreateNew addNew={addNew} />}></Route>
-        <Route path="/about" element={<About />}></Route>
-      </Routes>
-      <br />
-      <Footer />
-    </Router>
+        <Routes>
+          <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
+          <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
+          <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
+          <Route path="/create_new" element={<CreateNew addNew={addNew} />}></Route>
+          <Route path="/about" element={<About />}></Route>
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    </Container>
   )
 }
 
