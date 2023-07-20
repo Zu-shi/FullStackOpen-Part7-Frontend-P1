@@ -3,6 +3,21 @@ import {
   BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
 import { useField } from './useField'
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const Input = styled.input`
+  margin: 0.25em;`
+
+
 
 // What do these all do?
 
@@ -93,18 +108,21 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
+          <Input />
           <input name='content' type={contentType.type} value={contentType.value} onChange={contentType.onChange} />
         </div>
         <div>
           author
+          <Input />
           <input name='author' type={authorType.type} value={authorType.value} onChange={authorType.onChange} />
         </div>
         <div>
           url for more info
+          <Input />
           <input name='info' type={infoType.type} value={infoType.value} onChange={infoType.onChange} />
         </div>
         <button onClick={(e) => { e.preventDefault(); infoType.reset(); authorType.reset(); contentType.reset() }}>reset</button>
-        <button>create</button>
+        <Button type="submit" primary=''>login</Button>
       </form>
     </div>
   )
